@@ -41,6 +41,13 @@
       page-break-after:always;
     }
     .page:last-child{ page-break-after:auto; }
+    /* Force a clean break before this entry so the auto page-break inside
+       page 1's long timeline doesn't land flush against the sheet edge;
+       the padding-top recreates proper top whitespace on the new sheet. */
+    .titem.break-before{
+      page-break-before:always;
+      padding-top:15mm;
+    }
   }
 
   .sheet-footer{
@@ -471,7 +478,7 @@
         </div>
       </div>
 
-      <div class="titem">
+      <div class="titem break-before">
         <div class="track"><div class="dot"></div></div>
         <div class="tcontent">
           <div class="trow"><div class="role">Co-Founder &amp; CEO — <span class="co">CHEQROOM</span><span class="exit-tag">Shareholder exit 2017</span></div><div class="dates">Sep 2013 – Jan 2017</div></div>
