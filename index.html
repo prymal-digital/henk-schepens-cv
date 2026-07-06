@@ -12,25 +12,30 @@
     margin: 0;
   }
 
-  /* ---------- ON-SCREEN "PAPER SHEET" PREVIEW ----------
-     Shows the CV as two A4 sheets on a gray backdrop when viewed in a
-     browser — like Google Docs / Word's print preview. Print rules
-     below strip this chrome away so the PDF export is clean, full-bleed
-     A4 with no gray background, gaps or shadows. */
-  html{ background:#e7e7ea; }
+  /* ---------- RESPONSIVE WEBPAGE LAYOUT (screen) ----------
+     On screen this is a normal full-width, mobile-friendly webpage —
+     content flows continuously with no visual "page" separation.
+     The @media print block below switches to a fixed A4 "paper sheet"
+     layout used only when exporting via the "Download as PDF" button. */
+  html{ background:#ffffff; }
   body{
-    background:#e7e7ea;
-    padding:14mm 0;
+    background:#ffffff;
   }
   .page{
-    width:210mm;
-    min-height:297mm;
-    margin:0 auto 10mm auto;
-    padding:15mm 16mm;
+    max-width:920px;
+    margin:0 auto;
+    padding:56px 40px;
     background:#ffffff;
-    box-shadow:0 6px 28px rgba(20,20,30,0.16);
     box-sizing:border-box;
     position:relative;
+  }
+  .page + .page{
+    border-top:1px solid var(--hair, #e9e8f0);
+    padding-top:44px;
+  }
+  @media screen and (max-width:640px){
+    .page{ padding:32px 20px; }
+    .page + .page{ padding-top:28px; }
   }
   @media print{
     html, body{ background:#ffffff; }
@@ -40,19 +45,26 @@
          A4 sheet, so this pins the box to the true page height, which in
          turn anchors the absolutely-positioned footer to the true page
          bottom regardless of how much content precedes it. */
-      width:auto; height:297mm; margin:0; padding:15mm 16mm;
-      box-shadow:none; box-sizing:border-box;
+      max-width:none; width:auto; height:297mm; margin:0; padding:15mm 16mm;
+      box-sizing:border-box;
       page-break-after:always;
     }
     .page:last-child{ page-break-after:auto; }
+    .page + .page{ border-top:none; padding-top:15mm; }
   }
 
-  .sheet-footer{
-    position:absolute; left:16mm; right:16mm; bottom:8mm;
-    display:flex; justify-content:space-between; align-items:center;
-    border-top:0.75pt solid #e7e5f5; padding-top:8px;
-    font-family:'Lato', sans-serif; font-size:7pt; font-weight:700;
-    letter-spacing:1.1px; text-transform:uppercase;
+  /* Page-number footer is a print-only artifact (pagination doesn't
+     apply to a continuously scrolling webpage) — hidden on screen. */
+  .sheet-footer{ display:none; }
+  @media print{
+    .sheet-footer{
+      display:flex;
+      position:absolute; left:16mm; right:16mm; bottom:8mm;
+      justify-content:space-between; align-items:center;
+      border-top:0.75pt solid #e7e5f5; padding-top:8px;
+      font-family:'Lato', sans-serif; font-size:7pt; font-weight:700;
+      letter-spacing:1.1px; text-transform:uppercase;
+    }
   }
   .sheet-footer .brand{ color:#5046C7; }
   .sheet-footer .pageno{ color:#8a8d95; letter-spacing:1px; }
@@ -318,6 +330,29 @@
   }
   .pagefooter b{ color:var(--accent-deep); }
   .pagefooter .pg::after{ content: counter(page) " / " counter(pages); }
+
+  /* ---------- MOBILE / SMALL SCREEN (screen only — never affects print) ---------- */
+  @media screen and (max-width:700px){
+    .header{
+      grid-template-columns: 58px 1fr;
+      row-gap:12px;
+    }
+    .contact-col{
+      grid-column: 1 / -1;
+      text-align:left;
+      white-space:normal;
+    }
+    .contact-col div{ justify-content:flex-start; }
+    .name-block h1{ font-size:21pt; }
+    .stats{ flex-wrap:wrap; row-gap:14px; }
+    .stat{ flex:1 1 45%; min-width:130px; }
+    .stat:nth-child(3){ border-left:1.5pt solid var(--hair); padding-left:16px; }
+    .value-grid{ grid-template-columns: 1fr; }
+    .grid2{ grid-template-columns: 1fr; gap:0; }
+    .skill-cards{ grid-template-columns: 1fr; }
+    .spotlight-row{ grid-template-columns: 1fr; }
+    .dl-btn{ top:12px; right:12px; padding:8px 14px; font-size:11px; }
+  }
 
 </style>
 </head>
