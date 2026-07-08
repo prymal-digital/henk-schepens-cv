@@ -44,35 +44,35 @@
     html, body{ background:#ffffff; }
     body{ padding:0; }
     .page{
-      /* No fixed height and no absolute positioning inside — those relied
-         on exact mm-height math that Chrome and Safari each computed
-         differently (and inconsistently from each other), producing
-         stray blank pages. Instead each .page is a natural-flow block
-         that simply starts on a new physical page; the browser paginates
-         based on real content height, which is identical everywhere. */
-      max-width:none; width:auto; margin:0; padding:0 16mm 15mm 16mm;
+      /* No fixed height, no flex, no absolute positioning — all three
+         caused stray blank pages or unexplained gaps in one browser or
+         another. Every .page just gets uniform 15mm top padding (applied
+         to ALL of them, not just the first, so we don't depend on
+         ":first-child" — that pseudo-class silently fails to match here
+         because the floating download button precedes the first .page in
+         the markup). Break-before is applied via the adjacent-sibling
+         rule below, which naturally only ever matches page 2, 3, ... —
+         never the first — regardless of what precedes it in the DOM. */
+      max-width:none; width:auto; margin:0; padding:15mm 16mm 10mm 16mm;
       box-sizing:border-box;
+    }
+    .page + .page{
+      border-top:none;
       break-before:page;
       page-break-before:always;
     }
-    .page:first-child{
-      break-before:auto;
-      page-break-before:auto;
-      padding-top:15mm;
-    }
-    .page + .page{ border-top:none; padding-top:15mm; }
   }
 
   /* Page-number footer is a print-only artifact (pagination doesn't
      apply to a continuously scrolling webpage) — hidden on screen. In
-     print it now sits in normal document flow directly after each
-     page's content (not pinned to the physical page edge) — this is
-     what makes the pagination itself reliable across browsers. */
+     print it sits in normal flow with a generous fixed top margin, which
+     lands it at a consistent, near-equal position across all 3 pages
+     given how evenly the content is now balanced between them. */
   .sheet-footer{ display:none; }
   @media print{
     .sheet-footer{
       display:flex;
-      margin-top:14mm;
+      margin-top:20mm;
       justify-content:space-between; align-items:center;
       border-top:0.75pt solid #e7e5f5; padding-top:8px;
       font-family:'Lato', sans-serif; font-size:7pt; font-weight:700;
