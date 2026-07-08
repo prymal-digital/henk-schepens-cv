@@ -44,31 +44,35 @@
     html, body{ background:#ffffff; }
     body{ padding:0; }
     .page{
-      /* Fixed (not min-) height, and deliberately 2mm under the true
-         297mm page: every .page is one physical A4 sheet, this pins the
-         box so the absolutely-positioned footer anchors to the true page
-         bottom, and the 2mm of slack avoids an exact-height rounding edge
-         case in some browsers' print engines that otherwise appends a
-         stray blank trailing page. */
-      max-width:none; width:auto; height:295mm; margin:0; padding:15mm 16mm;
+      /* No fixed height and no absolute positioning inside — those relied
+         on exact mm-height math that Chrome and Safari each computed
+         differently (and inconsistently from each other), producing
+         stray blank pages. Instead each .page is a natural-flow block
+         that simply starts on a new physical page; the browser paginates
+         based on real content height, which is identical everywhere. */
+      max-width:none; width:auto; margin:0; padding:0 16mm 15mm 16mm;
       box-sizing:border-box;
-      page-break-after:always;
-      break-after:page;
+      break-before:page;
+      page-break-before:always;
     }
-    .page:last-child{
-      page-break-after:auto !important;
-      break-after:auto !important;
+    .page:first-child{
+      break-before:auto;
+      page-break-before:auto;
+      padding-top:15mm;
     }
     .page + .page{ border-top:none; padding-top:15mm; }
   }
 
   /* Page-number footer is a print-only artifact (pagination doesn't
-     apply to a continuously scrolling webpage) — hidden on screen. */
+     apply to a continuously scrolling webpage) — hidden on screen. In
+     print it now sits in normal document flow directly after each
+     page's content (not pinned to the physical page edge) — this is
+     what makes the pagination itself reliable across browsers. */
   .sheet-footer{ display:none; }
   @media print{
     .sheet-footer{
       display:flex;
-      position:absolute; left:16mm; right:16mm; bottom:8mm;
+      margin-top:14mm;
       justify-content:space-between; align-items:center;
       border-top:0.75pt solid #e7e5f5; padding-top:8px;
       font-family:'Lato', sans-serif; font-size:7pt; font-weight:700;
@@ -249,6 +253,7 @@
     padding-bottom:11px;
     break-inside: avoid;
   }
+  @media print{ .titem{ padding-bottom:7px; } }
   .titem:last-child{ padding-bottom:0; }
   .track{ position:relative; display:flex; justify-content:center; }
   .track::before{
@@ -262,6 +267,7 @@
     background:var(--accent); margin-top:4px; position:relative; z-index:1;
   }
   .tcontent{ padding-bottom:2px; }
+  @media print{ .tcontent{ padding-bottom:0; } }
   .trow{
     display:flex; justify-content:space-between; align-items:baseline;
     gap:10px; flex-wrap:wrap;
@@ -280,6 +286,7 @@
     font-size:0.903em; color:var(--body); padding-left:11px; position:relative;
     margin-bottom:2px; line-height:1.4;
   }
+  @media print{ .tbullets li{ margin-bottom:0.5px; line-height:1.3; } }
   .tbullets li::before{
     content:"—"; position:absolute; left:0; color:var(--accent); font-weight:700;
   }
@@ -523,7 +530,7 @@
       <div class="titem">
         <div class="track"><div class="dot"></div></div>
         <div class="tcontent">
-          <div class="trow"><div class="role">Founder, Digital Impact Expert — <span class="co">True Impact Club</span></div><div class="dates">Sep 2022 – Jun 2025</div></div>
+          <div class="trow"><div class="role">Founder, Digital Impact Expert — <span class="co">True Impact Club</span></div><div class="dates">Sep 2023 – Jun 2025</div></div>
           <p class="tdesc">Built a community concept for conscious entrepreneurs focused on business growth, personal development and impact.</p>
           <ul class="tbullets">
             <li>Created community formats, events and online content</li>
