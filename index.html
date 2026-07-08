@@ -44,15 +44,21 @@
     html, body{ background:#ffffff; }
     body{ padding:0; }
     .page{
-      /* Fixed (not min-) height: every .page is now exactly one physical
-         A4 sheet, so this pins the box to the true page height, which in
-         turn anchors the absolutely-positioned footer to the true page
-         bottom regardless of how much content precedes it. */
-      max-width:none; width:auto; height:297mm; margin:0; padding:15mm 16mm;
+      /* Fixed (not min-) height, and deliberately 2mm under the true
+         297mm page: every .page is one physical A4 sheet, this pins the
+         box so the absolutely-positioned footer anchors to the true page
+         bottom, and the 2mm of slack avoids an exact-height rounding edge
+         case in some browsers' print engines that otherwise appends a
+         stray blank trailing page. */
+      max-width:none; width:auto; height:295mm; margin:0; padding:15mm 16mm;
       box-sizing:border-box;
       page-break-after:always;
+      break-after:page;
     }
-    .page:last-child{ page-break-after:auto; }
+    .page:last-child{
+      page-break-after:auto !important;
+      break-after:auto !important;
+    }
     .page + .page{ border-top:none; padding-top:15mm; }
   }
 
