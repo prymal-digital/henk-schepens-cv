@@ -71,7 +71,7 @@
 
   /* ---------- FLOATING DOWNLOAD BUTTON (screen only) ---------- */
   .dl-btn{
-    position:fixed; top:18px; right:18px; z-index:100;
+    position:fixed; bottom:24px; right:24px; z-index:100;
     background:#5046E5; color:#ffffff; border:none; cursor:pointer;
     font-family:'Lato', sans-serif; font-size:12px; font-weight:700;
     letter-spacing:0.3px;
@@ -390,7 +390,11 @@
     .grid2{ grid-template-columns: 1fr; gap:0; }
     .skill-cards{ grid-template-columns: 1fr; }
     .spotlight-row{ grid-template-columns: 1fr; }
-    .dl-btn{ top:12px; right:12px; padding:9px 16px; font-size:0.8em; }
+    .dl-btn{
+      bottom:18px; right:18px;
+      padding:15px 24px; font-size:1em; border-radius:14px;
+      box-shadow:0 8px 24px rgba(80,70,229,0.4);
+    }
   }
 
 </style>
